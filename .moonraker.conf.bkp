@@ -24,6 +24,49 @@ trusted_clients =
 
 [octoprint_compat]
 
+[mqtt]
+address = 192.168.0.165
+enable_tls = False
+username = schinkermqtt
+password = Schinker@49
+
+[sensor fritzdectmqtt_powermeter]
+type = mqtt
+name = Powermeter
+parameter_power = 
+	units=W
+parameter_voltage = 
+	units=V
+parameter_current = 
+	units=mA
+parameter_energy = 
+	units=kWh
+state_topic = sensor/FB/MyFritzbox/087610454296
+state_response_template = 
+	{% set notification = payload | fromjson %}
+	{set_result("power", notification["power"] | float)}
+	{set_result("voltage", notification["voltage"] | float)}
+	{set_result("current", notification["current"] | float)}
+	{set_result("energy", notification["allpower"] | float)}
+	{set_result("temp", notification["temp"] | float)}
+history_field_energy_consumption = 
+	parameter=energy
+	desc=Printer energy consumption
+	strategy=delta
+	units=kWh
+	init_tracker=true
+	precision=6
+	exclude_paused=false
+	report_total=true
+	report_maximum=true
+history_field_average_current = 
+	parameter=current
+	desc=Average current draw
+	strategy=average
+	units=A
+	report_total=false
+	report_maximum=true
+
 [history]
 
 [announcements]
